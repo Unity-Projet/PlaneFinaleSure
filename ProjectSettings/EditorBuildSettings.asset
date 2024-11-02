@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Scene plane 1.unity
+    guid: bab7dd8659ab4ff409fbde54dc03b393
+  - enabled: 1
     path: Assets/Scenes/Scene_Envr/scene_runway.unity
     guid: a881f351b4ec11f43a13e75aeaf42589
   - enabled: 1
+    path: Assets/Scenes/ShopScene.unity
+    guid: a760cf5726f6042498c9575f2a7f2326
+  - enabled: 1
     path: Assets/Scenes/Scene_Pov_Inside/scene_cockpit.unity
     guid: 9bc521cbb4e0bd24cb744264ed976235
+  - enabled: 1
+    path: Assets/Scenes/Scene_Quiz/scene_quiz.unity
+    guid: b9608c9efadf8bd40b79c542be25c5e4
   m_configObjects: {}
