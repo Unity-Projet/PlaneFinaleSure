@@ -22,6 +22,7 @@ public class QuizManager : MonoBehaviour
 
     private int currentQuestionIndex;
     private int score;
+    private bool hasAnswered = false; 
     private float shakeThreshold = 1.5f;
     private Vector3 lastAcceleration;
 
@@ -63,6 +64,7 @@ public class QuizManager : MonoBehaviour
                 optionButtons[i].onClick.AddListener(() => CheckAnswer(index));
             }
 
+            hasAnswered = false; 
             nextButton.gameObject.SetActive(false);
         }
         else
@@ -73,22 +75,33 @@ public class QuizManager : MonoBehaviour
 
     public void CheckAnswer(int chosenIndex)
     {
-        if (questions[currentQuestionIndex].correctAnswerIndex == chosenIndex)
+        if (!hasAnswered)
         {
-            score++;
+            hasAnswered = true; 
+            if (questions[currentQuestionIndex].correctAnswerIndex == chosenIndex)
+            {
+                score++;
+            }
+            nextButton.gameObject.SetActive(true);
         }
-        nextButton.gameObject.SetActive(true);
     }
 
     public void NextQuestion()
     {
         currentQuestionIndex++;
-        DisplayQuestion();
+        if (currentQuestionIndex < questions.Count)
+        {
+            DisplayQuestion();
+        }
+        else
+        {
+            ShowScore();
+        }
     }
 
     private void ShowScore()
     {
         scoreText.text = "Your score: " + score + "/" + questions.Count;
-        nextButton.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(false); 
     }
 }
