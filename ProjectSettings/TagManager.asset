@@ -14,9 +14,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - CockpitLayer
+  - Plane
+  - HideInCockpit
   - 
   - 
   - 
