@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "PlaneFinale.sln"
+    "dotnet.defaultSolution": "PlaneFinaleSure.sln"
 }

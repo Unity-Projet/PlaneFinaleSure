@@ -7,8 +7,15 @@ public class ShipController : MonoBehaviour
     [BoxGroup("Ship movement values")]
     [SerializeField]
     [Range(1000f, 10000f)]
-    private float _thrustForce = 7500f,
-        _yawForce = 2000f;
+    private float _thrustForce = 7500f;
+    
+    [BoxGroup("Ship movement values")]
+    [SerializeField]
+    [Range(500f, 5000f)]  // Reduced the range for yaw force
+    private float _yawForce = 500f;
+
+    [SerializeField]
+    private float smoothingFactor = 0.5f;  // Adjust this value to control the sensitivity
 
     private Rigidbody _rigidBody;
 
@@ -36,8 +43,8 @@ public class ShipController : MonoBehaviour
 
     void ApplyYawForce(Vector3 gyroRotation)
     {
-        // Apply yaw (Y-axis rotation)
-        _rigidBody.AddTorque(transform.up * (_yawForce * gyroRotation.y * Time.deltaTime));
+        // Apply yaw (Y-axis rotation) with smoothing factor
+        _rigidBody.AddTorque(transform.up * (_yawForce * gyroRotation.y * smoothingFactor * Time.deltaTime));
     }
 
     // Get rotation from the gyroscope sensor
