@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class AirplaneControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public float vitesse = 20f;
     private float currentSpeed = 0f;
@@ -150,8 +150,8 @@ public class AirplaneControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             float distanceToTarget = Vector3.Distance(transform.position, targetPoint.position);
             if (distanceToTarget < 5f) // Rayon de validation (ajustable)
             {
-                // Lorsque l'avion entre dans l'anneau, définir la position X à 750
-                transform.position = new Vector3(550f, transform.position.y, transform.position.z);
+                // Lorsque l'avion entre dans l'anneau, définir la position X à 820
+                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
                 MissionSuccess();
             }
             else if (missionTimeElapsed >= missionTimeLimit)
@@ -197,7 +197,7 @@ public class AirplaneControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         if (other.CompareTag("TargetRing")) // S'assurer que l'anneau a le tag "TargetRing"
         {
             // Quand l'avion entre dans l'anneau
-            transform.position = new Vector3(750f, transform.position.y, transform.position.z); // Définir la position X de l'avion
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z); // Définir la position X de l'avion
             MissionSuccess(); // Marquer la mission comme réussie
         }
     }
