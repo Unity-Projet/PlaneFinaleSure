@@ -1,7 +1,9 @@
+
 //using UnityEngine;
 //using UnityEngine.EventSystems;
 //using UnityEngine.UI;
 //using TMPro;
+//using UnityEngine.SceneManagement; // N'oubliez pas d'importer pour utiliser SceneManager
 
 //public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 //{
@@ -12,14 +14,12 @@
 //    private bool tournerGauche = false;
 //    private bool descendre = false;
 
-//    public float sensitivity = 15.0f; // Sensibilité ajustée
-//    public float verticalSensitivity = 7.5f; // Sensibilité verticale ajustée
-
+//    public float sensitivity = 15.0f;
+//    public float verticalSensitivity = 7.5f;
 //    public float maxTiltAngle = 45f;
 //    public float maxPitchAngle = 30f;
-
-//    public float maxHeight = 10f; // Hauteur maximale
-//    public float minHeight = 0f;  // Hauteur minimale
+//    public float maxHeight = 10f;
+//    public float minHeight = 0f;
 
 //    public Button controlButton;
 //    public Button turnRightButton;
@@ -27,23 +27,28 @@
 //    public Button descendButton;
 //    public TMP_Text speedText;
 
-//    private Rigidbody rb;
+//    // Variables de la mission
+//    public Transform targetPoint;
+//    public float missionTimeLimit = 60f;
+//    private float missionTimeElapsed = 0f;
+//    private bool missionCompleted = false;
+//    public TMP_Text missionStatusText;
 
-//    // Variables pour la mission
-//    public Transform targetPoint; // Point cible de la mission (l'anneau)
-//    public float missionTimeLimit = 60f; // Temps limite de la mission en secondes (1 minute)
-//    private float missionTimeElapsed = 0f; // Temps écoulé depuis le début de la mission
-//    private bool missionCompleted = false; // État de la mission
-//    public TMP_Text missionStatusText; // Texte pour afficher le statut de la mission
-
-//    // Référence à l'anneau cible pour changer la couleur
 //    public Renderer targetRingRenderer;
+
+//    // Variables pour l'alerte
+//    public GameObject alertDialog;
+//    public TMP_Text alertText;
+//    public Button quitButton;
+//    public Button restartButton;
+
+//    private Rigidbody rb;
 
 //    void Start()
 //    {
 //        rb = GetComponent<Rigidbody>();
 
-//        // Configurer les événements pour les boutons de contrôle
+//        // Configurer les événements des boutons de contrôle
 //        EventTrigger trigger = controlButton.gameObject.AddComponent<EventTrigger>();
 //        EventTrigger.Entry pointerDownEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
 //        pointerDownEntry.callback.AddListener((data) => { OnPointerDown((PointerEventData)data); });
@@ -53,7 +58,6 @@
 //        pointerUpEntry.callback.AddListener((data) => { OnPointerUp((PointerEventData)data); });
 //        trigger.triggers.Add(pointerUpEntry);
 
-//        // Configurer les événements pour les boutons de rotation et descente
 //        AddEventTrigger(turnRightButton, EventTriggerType.PointerDown, (data) => { tournerDroite = true; });
 //        AddEventTrigger(turnRightButton, EventTriggerType.PointerUp, (data) => { tournerDroite = false; });
 
@@ -63,7 +67,7 @@
 //        AddEventTrigger(descendButton, EventTriggerType.PointerDown, (data) => { descendre = true; });
 //        AddEventTrigger(descendButton, EventTriggerType.PointerUp, (data) => { descendre = false; });
 
-//        // Initialisation de l'interface utilisateur pour la mission
+//        // Initialisation de l'interface de mission
 //        missionStatusText.text = "Mission: Atteignez le point cible dans 1 minute!";
 //    }
 
@@ -78,13 +82,11 @@
 //    public void OnPointerDown(PointerEventData eventData)
 //    {
 //        avancer = true;
-//        Debug.Log("Button Pressed: Avancer");
 //    }
 
 //    public void OnPointerUp(PointerEventData eventData)
 //    {
 //        avancer = false;
-//        Debug.Log("Button Released: Avancer");
 //    }
 
 //    void Update()
@@ -104,7 +106,7 @@
 
 //        // Mouvement horizontal basé sur l'inclinaison du smartphone
 //        float dirX = Input.acceleration.x * sensitivity;
-//        transform.Translate(Vector3.right * dirX * Time.deltaTime); // Déplace l'avion vers la droite/gauche
+//        transform.Translate(Vector3.right * dirX * Time.deltaTime);
 
 //        // Limiter la position horizontale
 //        float clampedX = Mathf.Clamp(transform.position.x, -850f, 850f);
@@ -126,18 +128,17 @@
 //        // Appliquer la rotation à gauche ou à droite
 //        if (tournerDroite)
 //        {
-//            transform.Rotate(Vector3.up, 200 * Time.deltaTime); // Ajuste la vitesse de rotation
+//            transform.Rotate(Vector3.up, 200 * Time.deltaTime);
 //        }
 
 //        if (tournerGauche)
 //        {
-//            transform.Rotate(Vector3.up, -200 * Time.deltaTime); // Ajuste la vitesse de rotation
+//            transform.Rotate(Vector3.up, -200 * Time.deltaTime);
 //        }
 
 //        // Appliquer la descente
 //        if (descendre && transform.position.y > minHeight)
 //        {
-//            Debug.Log("Descending");
 //            transform.Translate(Vector3.down * verticalSensitivity * Time.deltaTime);
 //        }
 
@@ -146,11 +147,9 @@
 //        {
 //            missionTimeElapsed += Time.deltaTime;
 
-//            // Vérifie si le joueur atteint la cible (l'anneau)
 //            float distanceToTarget = Vector3.Distance(transform.position, targetPoint.position);
-//            if (distanceToTarget < 5f) // Rayon de validation (ajustable)
+//            if (distanceToTarget < 5f)
 //            {
-//                // Lorsque l'avion entre dans l'anneau, définir la position X à 820
 //                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 //                MissionSuccess();
 //            }
@@ -165,43 +164,66 @@
 //    {
 //        missionCompleted = true;
 //        missionStatusText.text = "Mission réussie !";
-//        Debug.Log("Mission réussie !");
+//        ShowAlert("Mission réussie!", true);
 
-//        // Change la couleur de l'anneau en vert en cas de succès
 //        if (targetRingRenderer != null)
 //        {
 //            targetRingRenderer.material.color = Color.green;
 //        }
-
-//        // Autres actions en cas de succès
 //    }
 
 //    private void MissionFailed()
 //    {
 //        missionCompleted = true;
-//        missionStatusText.text = "Mission échouée ! ";
-//        Debug.Log("Mission échouée !");
+//        missionStatusText.text = "Mission échouée !";
+//        ShowAlert("Mission échouée!", false);
 
-//        // Change la couleur de l'anneau en rouge en cas d'échec
 //        if (targetRingRenderer != null)
 //        {
 //            targetRingRenderer.material.color = Color.red;
 //        }
-
-//        // Autres actions en cas d'échec
 //    }
 
-//    // Détection d'entrée dans l'anneau (lorsque le collider de l'avion touche l'anneau)
+//    // Afficher l'alerte
+//    private void ShowAlert(string message, bool isSuccess)
+//    {
+//        alertText.text = message;
+//        alertDialog.SetActive(true);
+
+//        quitButton.gameObject.SetActive(true);
+//        restartButton.gameObject.SetActive(!isSuccess); // Affiche "Restart" seulement si échec
+
+//        quitButton.onClick.AddListener(QuitToMenu);
+//        restartButton.onClick.AddListener(RestartMission);
+//    }
+
+//    // Fonction pour quitter au menu principal
+//    public void QuitToMenu()
+//    {
+//        SceneManager.LoadScene("Scene plane 1");
+//    }
+
+//    // Fonction pour redémarrer la mission
+//    public void RestartMission()
+//    {
+//        SceneManager.LoadScene("scene_runway1");
+//    }
+//    public void RetourMenuu()
+//    {
+//        // Code pour retourner au menu principal, exemple :
+//        SceneManager.LoadScene("Scene plane 1");
+//    }
+
 //    private void OnTriggerEnter(Collider other)
 //    {
-//        if (other.CompareTag("TargetRing")) // S'assurer que l'anneau a le tag "TargetRing"
+//        if (other.CompareTag("TargetRing"))
 //        {
-//            // Quand l'avion entre dans l'anneau
-//            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z); // Définir la position X de l'avion
-//            MissionSuccess(); // Marquer la mission comme réussie
+//            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+//            MissionSuccess();
 //        }
 //    }
 //}
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -229,6 +251,13 @@ public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     public Button turnLeftButton;
     public Button descendButton;
     public TMP_Text speedText;
+
+    // Boutons pour déplacer l'avion à gauche et à droite
+    public Button moveLeftButton;
+    public Button moveRightButton;
+
+    private bool moveLeft = false;
+    private bool moveRight = false;
 
     // Variables de la mission
     public Transform targetPoint;
@@ -270,6 +299,13 @@ public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         AddEventTrigger(descendButton, EventTriggerType.PointerDown, (data) => { descendre = true; });
         AddEventTrigger(descendButton, EventTriggerType.PointerUp, (data) => { descendre = false; });
 
+        // Ajouter les événements des boutons pour déplacer l'avion à gauche ou à droite
+        AddEventTrigger(moveLeftButton, EventTriggerType.PointerDown, (data) => { moveLeft = true; });
+        AddEventTrigger(moveLeftButton, EventTriggerType.PointerUp, (data) => { moveLeft = false; });
+
+        AddEventTrigger(moveRightButton, EventTriggerType.PointerDown, (data) => { moveRight = true; });
+        AddEventTrigger(moveRightButton, EventTriggerType.PointerUp, (data) => { moveRight = false; });
+
         // Initialisation de l'interface de mission
         missionStatusText.text = "Mission: Atteignez le point cible dans 1 minute!";
     }
@@ -307,15 +343,21 @@ public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
         speedText.text = currentSpeed.ToString("F2");
 
-        // Mouvement horizontal basé sur l'inclinaison du smartphone
-        float dirX = Input.acceleration.x * sensitivity;
-        transform.Translate(Vector3.right * dirX * Time.deltaTime);
+        // Appliquer le mouvement horizontal basé sur les boutons
+        if (moveLeft)
+        {
+            transform.Translate(Vector3.left * vitesse * Time.deltaTime);  // Déplacer à gauche
+        }
+        else if (moveRight)
+        {
+            transform.Translate(Vector3.right * vitesse * Time.deltaTime);  // Déplacer à droite
+        }
 
         // Limiter la position horizontale
         float clampedX = Mathf.Clamp(transform.position.x, -850f, 850f);
         transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
-        // Gérer l'inclinaison verticale
+        // Gérer l'inclinaison verticale (mouvement haut/bas)
         float verticalTilt = Input.acceleration.z;
         verticalTilt = Mathf.Clamp(verticalTilt, -1, 1);
         if (transform.position.y < maxHeight || verticalTilt < 0)
@@ -411,6 +453,7 @@ public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     {
         SceneManager.LoadScene("scene_runway1");
     }
+
     public void RetourMenuu()
     {
         // Code pour retourner au menu principal, exemple :
@@ -426,3 +469,4 @@ public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         }
     }
 }
+
