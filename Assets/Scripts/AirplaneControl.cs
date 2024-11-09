@@ -423,4 +423,9 @@ public class AirplaneControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         SceneManager.LoadScene("scene_runway");
     }
+    public void RetourMenuu()
+    {
+        // Code pour retourner au menu principal, exemple :
+        SceneManager.LoadScene("Scene plane 1");
+    }
 }

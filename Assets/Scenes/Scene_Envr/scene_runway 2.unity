@@ -760,9 +760,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 894195299}
-        m_TargetAssemblyTypeName: AirplaneControl, Assembly-CSharp
-        m_MethodName: RetourMenu
+      - m_Target: {fileID: 894195301}
+        m_TargetAssemblyTypeName: AirplaneControl2, Assembly-CSharp
+        m_MethodName: RetourMenuu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
