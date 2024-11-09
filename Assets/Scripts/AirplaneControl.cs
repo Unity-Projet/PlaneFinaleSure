@@ -167,7 +167,7 @@ public class AirplaneControl : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private void MissionSuccess()
     {
         missionCompleted = true;
-        ShowAlert("Mission réussie !", true); // Succès : seul le bouton Quit s'affiche
+        ShowAlert("Mission réussie ", true); // Succès : seul le bouton Quit s'affiche
         if (targetRingRenderer != null)
         {
             targetRingRenderer.material.color = Color.green;

@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene_Envr/scene_runway.unity
     guid: a881f351b4ec11f43a13e75aeaf42589
+  - enabled: 1
+    path: Assets/Scenes/Scene_Envr/scene_runway 2.unity
+    guid: 99e1f3b4c55faf44aba81c595d95e91d
   m_configObjects: {}
