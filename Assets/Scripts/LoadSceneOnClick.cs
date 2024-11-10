@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadSceneOnClick : MonoBehaviour
 {
-    public GameObject missionPanel; // Référence au panel contenant les boutons de mission
+    public GameObject missionPanel; // Rï¿½fï¿½rence au panel contenant les boutons de mission
 
     // Fonction pour afficher le panel des missions
     public void ShowMissionPanel()
@@ -19,35 +19,39 @@ public class LoadSceneOnClick : MonoBehaviour
         missionPanel.SetActive(false); // Cacher le panel
     }
 
-    // Fonction pour charger la scène de la Mission 1
+    // Fonction pour charger la scï¿½ne de la Mission 1
     public void LoadMission1Scene()
     {
-        SceneManager.LoadScene("scene_runway"); // Charger la scène pour la Mission 1
+        SceneManager.LoadScene("scene_runway"); // Charger la scï¿½ne pour la Mission 1
     }
 
-    // Fonction pour charger la scène de la Mission 2
+    // Fonction pour charger la scï¿½ne de la Mission 2
     public void LoadMission2Scene()
     {
-        SceneManager.LoadScene("scene_runway1"); // Charger la scène pour la Mission 2
+        SceneManager.LoadScene("scene_runway1"); // Charger la scï¿½ne pour la Mission 2
     }
     public void LoadMission3Scene()
     {
-        SceneManager.LoadScene("scene_runway 2"); // Charger la scène pour la Mission 1
+        SceneManager.LoadScene("scene_runway 2"); // Charger la scï¿½ne pour la Mission 1
     }
 
-    // Fonction pour charger la scène du magasin
+    // Fonction pour charger la scï¿½ne du magasin
     public void LoadShopScene()
     {
-        SceneManager.LoadScene("ShopScene"); // Charger la scène du magasin
+        SceneManager.LoadScene("ShopScene"); // Charger la scï¿½ne du magasin
     }
 
-    // Fonction pour charger la scène du quiz
+    // Fonction pour charger la scï¿½ne du quiz
     public void LoadQuizScene()
     {
-        SceneManager.LoadScene("scene_quiz"); // Charger la scène du quiz
+        SceneManager.LoadScene("scene_quiz"); // Charger la scï¿½ne du quiz
     }
     public void LoadAvionScene()
     {
-        SceneManager.LoadScene("avion"); // Charger la scène du quiz
+        SceneManager.LoadScene("avion"); // Charger la scï¿½ne du quiz
+    }
+      public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName); 
     }
 }
