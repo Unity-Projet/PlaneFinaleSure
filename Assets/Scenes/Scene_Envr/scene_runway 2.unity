@@ -1522,7 +1522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a4ef1fb9702464e9dafd54f6ad8326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vitesse: 20
+  vitesse: 27
   sensitivity: 15
   verticalSensitivity: 7.5
   maxTiltAngle: 45

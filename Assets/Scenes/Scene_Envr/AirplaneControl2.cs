@@ -390,7 +390,7 @@ using UnityEngine.SceneManagement;
 public class AirplaneControl2 : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     // Variables de vitesse et de contrôle de l'avion
-    public float vitesse = 20f;
+    public float vitesse = 27f;
     private float currentSpeed = 0f;
     private bool avancer = false;
     private bool tournerDroite = false;

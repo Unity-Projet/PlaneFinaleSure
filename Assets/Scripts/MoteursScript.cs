@@ -104,11 +104,111 @@
 //    }
 //}
 
+//using System.Collections.Generic;
+//using UnityEngine;
+//using UnityEngine.UI;
+//using UnityEngine.SceneManagement;
+
+//public class Moteur
+//{
+//    public string Nom { get; set; }
+//    public int Vitesse { get; set; }
+//    public int Consommation { get; set; }
+//    public int Poids { get; set; }
+//    public int Resistance { get; set; }
+//    public string TypeDeFrein { get; set; }
+
+//    public Moteur(string nom, int vitesse, int consommation, int poids, int resistance, string typeDeFrein)
+//    {
+//        Nom = nom;
+//        Vitesse = vitesse;
+//        Consommation = consommation;
+//        Poids = poids;
+//        Resistance = resistance;
+//        TypeDeFrein = typeDeFrein;
+//    }
+
+//    public string GetCaracteristiques()
+//    {
+//        return $"Modèle {Nom} :\n\n" +
+//               $"Vitesse: {Vitesse}\n" +
+//               $"Consommation de carburant: {Consommation}\n" +
+//               $"Poids: {Poids} kg\n" +
+//               $"Résistance: {Resistance} kg\n" +
+//               $"Type de frein: {TypeDeFrein}";
+//    }
+//}
+
+//public class MoteursScript : MonoBehaviour
+//{
+//    public GameObject panelCaracteristiquesMoteurs;
+//    public GameObject panelInfoMoteurs;
+//    public Text caracteristiquesTextMoteurs;
+
+//    public Button moteursButton;
+//    public Button trent500Button;
+//    public Button trent700Button;
+//    public Button cf680E1Button;
+
+//    public Button fermerPanelInfoButton;
+//    public Button fermerPanelCaracteristiquesButton;
+//    public Button retourButton;
+
+//    private List<Moteur> moteurs;
+
+//    void Start()
+//    {
+//        // Initialisation des moteurs
+//        moteurs = new List<Moteur>
+//        {
+//            new Moteur("Trent500", 500, 300, 500, 2500, "Hydraulique"),
+//            new Moteur("Trent700", 700, 250, 800, 1500, "Mécanique"),
+//            new Moteur("CF680E1", 600, 280, 950, 1800, "Électrique")
+//        };
+
+//        moteursButton.onClick.AddListener(ShowMoteursPanel);
+//        trent500Button.onClick.AddListener(() => ShowCaracteristiques(0));
+//        trent700Button.onClick.AddListener(() => ShowCaracteristiques(1));
+//        cf680E1Button.onClick.AddListener(() => ShowCaracteristiques(2));
+
+//        fermerPanelInfoButton.onClick.AddListener(ClosePanelInfoMoteurs);
+//        fermerPanelCaracteristiquesButton.onClick.AddListener(ClosePanelCaracteristiquesMoteurs);
+//        retourButton.onClick.AddListener(ReturnToPlaneScene);
+//    }
+
+//    void ShowMoteursPanel()
+//    {
+//        panelCaracteristiquesMoteurs.SetActive(true);
+//    }
+
+//    void ShowCaracteristiques(int index)
+//    {
+//        caracteristiquesTextMoteurs.text = moteurs[index].GetCaracteristiques();
+//        panelInfoMoteurs.SetActive(true);
+//    }
+
+//    void ClosePanelInfoMoteurs()
+//    {
+//        panelInfoMoteurs.SetActive(false);
+//    }
+
+//    void ClosePanelCaracteristiquesMoteurs()
+//    {
+//        panelCaracteristiquesMoteurs.SetActive(false);
+//    }
+
+//    void ReturnToPlaneScene()
+//    {
+//        SceneManager.LoadScene("Scene Plane 1");
+//    }
+//}
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+// Classe Moteur représentant les caractéristiques d'un moteur
 public class Moteur
 {
     public string Nom { get; set; }
@@ -139,6 +239,7 @@ public class Moteur
     }
 }
 
+// Classe pour gérer l'affichage des moteurs et l'achat
 public class MoteursScript : MonoBehaviour
 {
     public GameObject panelCaracteristiquesMoteurs;
@@ -149,31 +250,42 @@ public class MoteursScript : MonoBehaviour
     public Button trent500Button;
     public Button trent700Button;
     public Button cf680E1Button;
+    public Button acheterButton; // Bouton acheter ajouté
 
     public Button fermerPanelInfoButton;
     public Button fermerPanelCaracteristiquesButton;
     public Button retourButton;
 
+    // Panel d'alerte
+    public GameObject alertPanel;
+    public Text alertText;
+    public Button closeAlertButton;
+
     private List<Moteur> moteurs;
+    private int moteurSelectionneIndex = -1;
 
     void Start()
     {
         // Initialisation des moteurs
         moteurs = new List<Moteur>
         {
-            new Moteur("Trent500", 500, 300, 500, 2500, "Hydraulique"),
-            new Moteur("Trent700", 700, 250, 800, 1500, "Mécanique"),
-            new Moteur("CF680E1", 600, 280, 950, 1800, "Électrique")
+            new Moteur("Trent500", 24, 300, 500, 2500, "Hydraulique"),
+            new Moteur("Trent700", 30, 250, 800, 1500, "Mécanique"),
+            new Moteur("CF680E1", 27, 280, 950, 1800, "Électrique")
         };
 
+        // Assignation des actions aux boutons
         moteursButton.onClick.AddListener(ShowMoteursPanel);
         trent500Button.onClick.AddListener(() => ShowCaracteristiques(0));
         trent700Button.onClick.AddListener(() => ShowCaracteristiques(1));
         cf680E1Button.onClick.AddListener(() => ShowCaracteristiques(2));
+        acheterButton.onClick.AddListener(AcheterMoteur); // Listener pour bouton acheter
 
         fermerPanelInfoButton.onClick.AddListener(ClosePanelInfoMoteurs);
         fermerPanelCaracteristiquesButton.onClick.AddListener(ClosePanelCaracteristiquesMoteurs);
         retourButton.onClick.AddListener(ReturnToPlaneScene);
+
+        closeAlertButton.onClick.AddListener(CloseAlert); // Fermeture de l'alerte
     }
 
     void ShowMoteursPanel()
@@ -183,8 +295,43 @@ public class MoteursScript : MonoBehaviour
 
     void ShowCaracteristiques(int index)
     {
+        moteurSelectionneIndex = index;
         caracteristiquesTextMoteurs.text = moteurs[index].GetCaracteristiques();
         panelInfoMoteurs.SetActive(true);
+    }
+
+    // Méthode publique pour acheter un moteur
+    public void AcheterMoteur()
+    {
+        if (moteurSelectionneIndex == -1) return;
+
+        Moteur moteur = moteurs[moteurSelectionneIndex];
+
+        // Affichage d'une alerte selon le moteur sélectionné
+        if (moteur.Nom == "Trent500")
+        {
+            ShowAlert("Vous avez déjà ce moteur dans mission 1.");
+        }
+        else if (moteur.Nom == "Trent700")
+        {
+            ShowAlert("Vous avez déjà ce moteur dans mission 2");
+        }
+        else if (moteur.Nom == "CF680E1")
+        {
+            ShowAlert("Vous n'avez pas assez d'argent pour acheter le CF680E1.");
+        }
+    }
+
+    void ShowAlert(string message)
+    {
+        alertPanel.SetActive(true);  // Affiche le panneau d'alerte
+        alertText.text = message;    // Définit le texte du message d'alerte
+    }
+
+    // Méthode publique pour fermer l'alerte (visibilité dans l'Inspector)
+    public void CloseAlert()
+    {
+        alertPanel.SetActive(false); // Cache le panneau d'alerte
     }
 
     void ClosePanelInfoMoteurs()

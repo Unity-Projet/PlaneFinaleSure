@@ -1730,7 +1730,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 894195294}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 065b4839b1affee45915e2b625b2f64a, type: 3}
   m_Name: 
@@ -1759,6 +1759,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4eee1bff2189beb4285fbc153f25db17, type: 3}
   m_PrefabInstance: {fileID: 1499761109}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &894195301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894195294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065b4839b1affee45915e2b625b2f64a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vitesse: 0
+  sensitivity: 15
+  verticalSensitivity: 7.5
+  maxTiltAngle: 45
+  maxPitchAngle: 30
+  maxHeight: 10
+  minHeight: 0
+  controlButton: {fileID: 411722981}
+  turnRightButton: {fileID: 2098702516}
+  turnLeftButton: {fileID: 795751907}
+  descendButton: {fileID: 353789846}
+  speedText: {fileID: 2018991955}
+  targetPoint: {fileID: 574371390}
+  missionTimeLimit: 60
+  alertDialog: {fileID: 933430738}
+  alertText: {fileID: 234439692}
+  quitButton: {fileID: 447086027}
+  restartButton: {fileID: 1874580508}
+  targetRingRenderer: {fileID: 1932772840}
 --- !u!4 &927011522 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5f19fe3a09cc93148a43b6056794a37d, type: 3}
@@ -2668,6 +2699,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4eee1bff2189beb4285fbc153f25db17, type: 3}
       insertIndex: -1
       addedObject: {fileID: 894195299}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4eee1bff2189beb4285fbc153f25db17, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 894195301}
     - targetCorrespondingSourceObject: {fileID: -7853440275052850784, guid: 4eee1bff2189beb4285fbc153f25db17, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1499761122}

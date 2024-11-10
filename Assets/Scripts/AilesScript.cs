@@ -1,101 +1,3 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.UI;
-//using UnityEngine.SceneManagement; // Pour gérer le changement de scène
-
-//public class AilesScript : MonoBehaviour
-//{
-//    // Panneaux
-//    public GameObject panelCaracteristiquesAiles; // Panel des modèles d'ailes
-//    public GameObject panelInfoAiles; // Panel pour les détails des ailes
-
-//    // Textes
-//    public Text caracteristiquesTextAiles; // Texte pour les caractéristiques des ailes
-
-//    // Boutons pour composants (dans PanelComposants)
-//    public Button ailesButton;
-
-//    // Boutons pour modèles d'ailes (dans PanelCaracteristiquesAiles)
-//    public Button wingModelAButton;
-//    public Button wingModelBButton;
-//    public Button wingModelCButton;
-
-//    // Boutons "Fermer" et "Retour"
-//    public Button fermerPanelInfoAilesButton; // Bouton fermer pour PanelInfoAiles
-//    public Button fermerPanelCaracteristiquesAilesButton; // Bouton fermer pour PanelCaracteristiquesAiles
-//    public Button retourButton; // Bouton pour revenir à la scène Plane
-
-//    void Start()
-//    {
-//        // Initialisation des boutons
-//        ailesButton.onClick.AddListener(ShowAilesPanel);
-//        wingModelAButton.onClick.AddListener(ShowCaracteristiquesWingModelA);
-//        wingModelBButton.onClick.AddListener(ShowCaracteristiquesWingModelB);
-//        wingModelCButton.onClick.AddListener(ShowCaracteristiquesWingModelC);
-
-//        // Boutons pour fermer les panels
-//        fermerPanelInfoAilesButton.onClick.AddListener(ClosePanelInfoAiles);
-//        fermerPanelCaracteristiquesAilesButton.onClick.AddListener(ClosePanelCaracteristiquesAiles);
-
-//        // Bouton pour revenir à la scène "Plane"
-//        retourButton.onClick.AddListener(ReturnToPlaneScene);
-//    }
-
-//    // Méthode pour afficher le PanelCaracteristiquesAiles
-//    void ShowAilesPanel()
-//    {
-//        panelCaracteristiquesAiles.SetActive(true);
-//    }
-
-//    // Méthodes pour afficher les caractéristiques des ailes
-//    void ShowCaracteristiquesWingModelA()
-//    {
-//        string caracteristiques = "Modèle WingModelA :\n\n" +
-//                                  "Envergure: 35 m\n" +
-//                                  "Surface: 150 m²\n" +
-//                                  "Charge: 150 kg/m²";
-//        caracteristiquesTextAiles.text = caracteristiques;
-//        panelInfoAiles.SetActive(true); // Affiche le panel info ailes
-//    }
-
-//    void ShowCaracteristiquesWingModelB()
-//    {
-//        string caracteristiques = "Modèle WingModelB :\n\n" +
-//                                  "Envergure: 40 m\n" +
-//                                  "Surface: 180 m²\n" +
-//                                  "Charge: 140 kg/m²";
-//        caracteristiquesTextAiles.text = caracteristiques;
-//        panelInfoAiles.SetActive(true); // Affiche le panel info ailes
-//    }
-
-//    void ShowCaracteristiquesWingModelC()
-//    {
-//        string caracteristiques = "Modèle WingModelC :\n\n" +
-//                                  "Envergure: 32 m\n" +
-//                                  "Surface: 130 m²\n" +
-//                                  "Charge: 160 kg/m²";
-//        caracteristiquesTextAiles.text = caracteristiques;
-//        panelInfoAiles.SetActive(true); // Affiche le panel info ailes
-//    }
-
-//    // Méthodes pour fermer les panels
-//    void ClosePanelInfoAiles()
-//    {
-//        panelInfoAiles.SetActive(false); // Cache le panel info ailes
-//    }
-
-//    void ClosePanelCaracteristiquesAiles()
-//    {
-//        panelCaracteristiquesAiles.SetActive(false); // Cache le panel caractéristiques ailes
-//    }
-
-//    // Méthode pour revenir à la scène "Plane"
-//    void ReturnToPlaneScene()
-//    {
-//        SceneManager.LoadScene("Scene Plane 1"); // Charge la scène Plane
-//    }
-//}
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -140,6 +42,14 @@ public class AilesScript : MonoBehaviour
     public Button fermerPanelCaracteristiquesAilesButton;
     public Button retourButton;
 
+    // Ajout des éléments pour l'alerte
+    public GameObject alertPanel;
+    public Text alertText;
+    public Button closeAlertButton;
+
+    // Ajout du bouton "Acheter" pour chaque modèle d'aile
+    public Button acheterModelAButton;
+
     private List<Aile> ailes;
 
     void Start()
@@ -152,6 +62,7 @@ public class AilesScript : MonoBehaviour
             new Aile("WingModelC", 32f, 130f, 160f)
         };
 
+        // Assignation des listeners aux boutons
         ailesButton.onClick.AddListener(ShowAilesPanel);
         wingModelAButton.onClick.AddListener(() => ShowCaracteristiques(0));
         wingModelBButton.onClick.AddListener(() => ShowCaracteristiques(1));
@@ -160,6 +71,12 @@ public class AilesScript : MonoBehaviour
         fermerPanelInfoAilesButton.onClick.AddListener(ClosePanelInfoAiles);
         fermerPanelCaracteristiquesAilesButton.onClick.AddListener(ClosePanelCaracteristiquesAiles);
         retourButton.onClick.AddListener(ReturnToPlaneScene);
+
+        // Ajout des listeners pour le bouton "Acheter"
+        acheterModelAButton.onClick.AddListener(() => OpenAlertForAcheter("Vous n'avez pas assez d'argent pour acheter"));
+
+        // Ajout du listener pour la fermeture de l'alerte
+        closeAlertButton.onClick.AddListener(CloseAlert);
     }
 
     void ShowAilesPanel()
@@ -186,5 +103,24 @@ public class AilesScript : MonoBehaviour
     void ReturnToPlaneScene()
     {
         SceneManager.LoadScene("Scene Plane 1");
+    }
+
+    // Méthode pour afficher une alerte
+    public void ShowAlert(string message)
+    {
+        alertPanel.SetActive(true);  // Affiche le panneau d'alerte
+        alertText.text = message;    // Affiche le message dans l'alerte
+    }
+
+    // Méthode pour fermer l'alerte
+    public void CloseAlert()
+    {
+        alertPanel.SetActive(false); // Cache le panneau d'alerte
+    }
+
+    // Méthode pour afficher l'alerte lorsque l'utilisateur clique sur "Acheter"
+    public void OpenAlertForAcheter(string message)
+    {
+        ShowAlert(message); // Affiche le message personnalisé selon le modèle d'aile acheté
     }
 }
