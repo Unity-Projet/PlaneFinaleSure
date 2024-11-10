@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Scene plane 1.unity
+    guid: bab7dd8659ab4ff409fbde54dc03b393
+  - enabled: 1
+    path: Assets/Scenes/ShopScene.unity
+    guid: a760cf5726f6042498c9575f2a7f2326
+  - enabled: 1
+    path: Assets/Scenes/Scene_Pov_Inside/scene_cockpit.unity
+    guid: 9bc521cbb4e0bd24cb744264ed976235
+  - enabled: 1
+    path: Assets/Scenes/Scene_Quiz/scene_quiz.unity
+    guid: b9608c9efadf8bd40b79c542be25c5e4
+  - enabled: 1
+    path: Assets/Scenes/avion.unity
+    guid: c1274f1d18568d14898f90f399abb696
+  - enabled: 1
+    path: Assets/Scenes/Scene_Envr 1/scene_runway1.unity
+    guid: e2b93972e9185334b88ddbbfb8119375
+  - enabled: 1
+    path: Assets/Scenes/Scene_Envr/scene_runway.unity
+    guid: a881f351b4ec11f43a13e75aeaf42589
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/FlightTipsScene.unity
+    guid: 4410d78dd20784c438d84b0583e7bc59
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/PlaneStatusScene.unity
+    guid: 64e16c2d7213c7244bda4662e544cc99
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/TakeOFFScene.unity
+    guid: 1464567d89c75de4db61be514394f012
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/WeatherScene.unity
+    guid: ead1f8aa11cb15841bf518a2c2e11bf4
+  m_configObjects: {}
