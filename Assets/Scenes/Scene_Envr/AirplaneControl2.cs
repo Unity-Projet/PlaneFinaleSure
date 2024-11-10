@@ -429,7 +429,7 @@ public class AirplaneControl2 : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
     // Variable pour gérer le temps depuis le dernier obstacle
     private float timeSinceLastObstacle = 0f;
-    private float timeToShowAlert = 50f; // Temps pour afficher l'alerte
+    private float timeToShowAlert = 35f; // Temps pour afficher l'alerte
 
     void Start()
     {

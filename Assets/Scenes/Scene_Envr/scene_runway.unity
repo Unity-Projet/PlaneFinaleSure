@@ -2562,7 +2562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ba4c5b3ca774e49a031f8b4e66035c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 0
+  time: 23599.85
   SunTransform: {fileID: 638710804}
   Sun: {fileID: 638710803}
   timetext: {fileID: 1232641389}
