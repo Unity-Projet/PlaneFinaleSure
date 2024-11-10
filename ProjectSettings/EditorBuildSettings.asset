@@ -29,4 +29,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene_Envr/scene_runway 2.unity
     guid: 99e1f3b4c55faf44aba81c595d95e91d
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/FlightTipsScene.unity
+    guid: 0717065998a31204aa2d401cbea30a5c
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/PlaneStatusScene.unity
+    guid: ed7271842d00a0244bbb576e32da4015
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/TakeOFFScene.unity
+    guid: 1464567d89c75de4db61be514394f012
+  - enabled: 1
+    path: Assets/Scenes/Scene_FlightPreparationTips/WeatherScene.unity
+    guid: 2e0713224f438d849aaf30be0e201cd3
   m_configObjects: {}
