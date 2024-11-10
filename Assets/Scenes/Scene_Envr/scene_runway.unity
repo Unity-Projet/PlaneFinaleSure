@@ -2570,7 +2570,7 @@ MonoBehaviour:
   intensity: 0
   fogday: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   fognight: {r: 0, g: 0, b: 0, a: 1}
-  speed: 3000
+  speed: 1
 --- !u!114 &1477497025
 MonoBehaviour:
   m_ObjectHideFlags: 0

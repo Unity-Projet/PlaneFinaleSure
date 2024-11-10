@@ -30,9 +30,15 @@ public class LoadSceneOnClick : MonoBehaviour
     {
         SceneManager.LoadScene("scene_runway1"); // Charger la sc�ne pour la Mission 2
     }
+    
+
     public void LoadMission3Scene()
     {
         SceneManager.LoadScene("scene_runway 2"); // Charger la sc�ne pour la Mission 1
+    }
+    public void LoadSSSSSSSSSS()
+    {
+        SceneManager.LoadScene("FlightTipsScene"); // Charger la sc�ne pour la Mission 1
     }
 
     // Fonction pour charger la sc�ne du magasin

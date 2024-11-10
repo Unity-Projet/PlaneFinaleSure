@@ -190,6 +190,7 @@
 //        }
 //    }
 //}
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -395,6 +396,10 @@ public class AirplaneControl1 : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     public void RestartMission()
     {
         SceneManager.LoadScene("scene_runway1");
+    }
+    public void RetourMenuu()
+    {
+        SceneManager.LoadScene("Scene plane 1");
     }
 
     private void OnTriggerEnter(Collider other)
