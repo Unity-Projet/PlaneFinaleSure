@@ -1,7 +1,8 @@
+using System.Collections;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
-using System.Collections;  // For loading scenes
+using UnityEngine.UI;
+using TMPro;
 
 public class ShipController : MonoBehaviour
 {
@@ -11,36 +12,34 @@ public class ShipController : MonoBehaviour
 
     [SerializeField]
     [Range(500f, 5000f)]
-    private float _yawForce = 500f;
+    private float _yawForce = 5f;
 
     [SerializeField]
-    private float forwardSpeed = 20f;  // Constant forward speed
+    private float forwardSpeed = 20f;
 
     [SerializeField]
-    private float upwardSpeed = 15f;   // Upward speed after button press
+    private float upwardSpeed = 15f;
 
     private Rigidbody _rigidBody;
-    private bool isGoingUp = false;    // Flag to start upward movement
-    private bool isMovingForward = false;  // Flag to start forward movement
-    private bool isGameOver = false;   // Flag for game over
-    private float targetHeight = 17f;  // Target height
+    private float rotationThreshold = 0.1f;
 
-    // Game Over logic
+    private bool isGoingUp = false;
+    private bool isGameOver = false;
+    private float targetHeight = 17f;
+
     private float targetX = 600.3f;
     private float targetZ = 8.47f;
-    private float tolerance = 0.0062f;  // Tolerance range
+    private float tolerance = 0.0062f;
 
-    // Damping factor to smooth out rotation
     [SerializeField]
-    private float dampingFactor = 0.1f;
+    private float dampingFactor = 0.05f;
+    private float smoothedYaw = 0f;
+    private float maxRotationSpeed = 15f;
 
-    // Slow down factor for gyroscope input
-    [SerializeField]
-    private float slowDownFactor = 0.5f;  // Adjust this to make rotation slower or faster
+    public TMP_Text gameOverMessageText;
+    public TMP_Text countdownText;
 
-    // UI text reference for displaying the "You hit the gate! Game Over" message
-    public TextMeshProUGUI gameOverMessageText;
-    public TextMeshProUGUI countdownText;  // Reference to the countdown text
+    private bool countdownStarted = false;
 
     void Awake()
     {
@@ -58,47 +57,57 @@ public class ShipController : MonoBehaviour
         {
             countdownText.text = "";  // Hide countdown initially
         }
+        
+        StartCoroutine(StartUpwardMovement());
     }
 
     void Update()
     {
-        if (isGameOver) return;  // Stop movement if game is over
+        if (isGameOver) return;
 
-        // Start moving forward only when isMovingForward is true
-        if (isMovingForward)
+        Vector3 gyroRotation = GetGyroscopeRotation();
+
+        if (IsSignificantRotation(gyroRotation))
         {
-            MoveForward();  // Constant forward movement
+            ApplySmoothYawForce(gyroRotation);
         }
 
-        // Start moving upward only when isGoingUp is true and the target height isn't reached
+        MoveForward();
+
         if (isGoingUp && transform.position.y < targetHeight)
         {
             MoveUpward();
         }
 
-        // Check if the ship has passed near the target x or z position within tolerance
         if (IsNearTargetPosition())
         {
-            Debug.Log("Ship has reached or is near the target x or z position. Game Over.");
             GameOver();
         }
     }
 
-    // Method to start moving forward
+    public void StartFlying()
+    {
+        isGoingUp = true;
+    }
+
+    IEnumerator StartUpwardMovement()
+    {
+        yield return new WaitForSeconds(5f);
+        isGoingUp = true;
+    }
+
     void MoveForward()
     {
         Vector3 forwardVelocity = transform.forward * forwardSpeed;
-        forwardVelocity.y = _rigidBody.velocity.y; // Preserve the current upward velocity
+        forwardVelocity.y = _rigidBody.velocity.y;
         _rigidBody.velocity = forwardVelocity;
     }
 
-    // Method to start moving upward
     void MoveUpward()
     {
         Vector3 upwardVelocity = new Vector3(0f, upwardSpeed * Time.deltaTime, 0f);
         _rigidBody.velocity += upwardVelocity;
 
-        // Clamp position to target height
         if (transform.position.y >= targetHeight)
         {
             Vector3 clampedPosition = transform.position;
@@ -108,16 +117,32 @@ public class ShipController : MonoBehaviour
         }
     }
 
-    // Method to start flying and moving forward when called
-    public void StartFlying()
+    void ApplySmoothYawForce(Vector3 gyroRotation)
     {
-        // Start both upward movement and forward movement when the button is pressed
-        isGoingUp = true;
-        isMovingForward = true;
-        Debug.Log("Plane started flying and moving forward!");
+        smoothedYaw = Mathf.Lerp(smoothedYaw, gyroRotation.y, dampingFactor);
+        smoothedYaw *= 0.1f;
+        smoothedYaw = Mathf.Clamp(smoothedYaw, -maxRotationSpeed, maxRotationSpeed);
+        _rigidBody.AddTorque(transform.up * (_yawForce * smoothedYaw * Time.deltaTime));
     }
 
-    // Check if the ship is near the target x or z position within tolerance
+    Vector3 GetGyroscopeRotation()
+    {
+        Quaternion gyroAttitude = Input.gyro.attitude;
+        Vector3 rotationEulerAngles = gyroAttitude.eulerAngles;
+        return NormalizeGyroRotation(rotationEulerAngles);
+    }
+
+    Vector3 NormalizeGyroRotation(Vector3 rotationEulerAngles)
+    {
+        float normalizedYaw = (rotationEulerAngles.y > 180 ? rotationEulerAngles.y - 360 : rotationEulerAngles.y) / 180f;
+        return new Vector3(0f, normalizedYaw, 0f);
+    }
+
+    private bool IsSignificantRotation(Vector3 gyroRotation)
+    {
+        return Mathf.Abs(gyroRotation.y) > rotationThreshold;
+    }
+
     private bool IsNearTargetPosition()
     {
         bool nearX = Mathf.Abs(transform.position.x - targetX) <= tolerance;
@@ -125,17 +150,15 @@ public class ShipController : MonoBehaviour
         return nearX || nearZ;
     }
 
-    // Game Over logic
     void GameOver()
     {
         isGameOver = true;
         _rigidBody.velocity = Vector3.zero;
         Debug.Log("Game Over!");
         ShowGameOverMessage();
-        StartCoroutine(RestartCountdown());  // Start countdown after game over
+        StartCoroutine(RestartCountdown());
     }
 
-    // Show "You hit the gate! Game Over" message
     void ShowGameOverMessage()
     {
         if (gameOverMessageText != null)
@@ -144,29 +167,28 @@ public class ShipController : MonoBehaviour
         }
     }
 
-    // Coroutine to handle the countdown and scene restart
     private IEnumerator RestartCountdown()
     {
         int countdownValue = 5;
+
         while (countdownValue > 0)
         {
             if (countdownText != null)
             {
                 countdownText.text = "Restarting in " + countdownValue;
             }
-            yield return new WaitForSeconds(1f);  // Wait for 1 second
-            countdownValue--;  // Decrease the countdown value
+            yield return new WaitForSeconds(1f);
+            countdownValue--;
         }
-        // After countdown ends, load the scene
+
         SceneManager.LoadScene("scene plane 1");
     }
 
-    // Detect collision with the gate
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Gate"))
         {
-            GameOver();  // Trigger Game Over when hitting the gate
+            GameOver();
         }
     }
 }
